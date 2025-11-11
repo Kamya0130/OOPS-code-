@@ -1,0 +1,96 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Product {
+public:
+    int id;
+    string name;
+    float price;
+    Product(int i, string n, float p) : id(i), name(n), price(p) {}
+};
+
+class Cart {
+    vector<Product> items;
+public:
+    void addProduct(Product p) {
+        items.push_back(p);
+    }
+    void displayCart() {
+        float total = 0;
+        cout << "\nYour Shopping Cart:\n";
+        for (auto &p : items) {
+            cout << p.id << " - " << p.name << " : Rs." << p.price << endl;
+            total += p.price;
+        }
+        cout << "----------------------------------\n";
+        cout << "Total Bill Amount: Rs." << total << endl;
+    }
+    bool isEmpty() {
+        return items.empty();
+    }
+    void clearCart() {
+        items.clear();
+    }
+};
+
+int main() {
+    vector<Product> products = {
+        Product(1, "Laptop", 55000),
+        Product(2, "Headphones", 1500),
+        Product(3, "Keyboard", 800),
+        Product(4, "Mouse", 500),
+        Product(5, "Smartphone", 25000)
+    };
+
+    Cart cart;
+    int choice;
+    do {
+        cout << "\n===== ONLINE SHOPPING SYSTEM =====\n";
+        cout << "1. View Products\n";
+        cout << "2. Add to Cart\n";
+        cout << "3. View Cart\n";
+        cout << "4. Checkout\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            cout << "\nAvailable Products:\n";
+            for (auto &p : products)
+                cout << p.id << " - " << p.name << " (Rs." << p.price << ")\n";
+        } else if (choice == 2) {
+            int id;
+            cout << "Enter Product ID to add: ";
+            cin >> id;
+            if (id > 0 && id <= (int)products.size()) {
+                cart.addProduct(products[id - 1]);
+                cout << "Product added to cart successfully!\n";
+            } else {
+                cout << "Invalid Product ID!\n";
+            }
+        } else if (choice == 3) {
+            if (cart.isEmpty()) {
+                cout << "\nCart is empty.\n";
+            } else {
+                cart.displayCart();
+            }
+        } else if (choice == 4) {
+            if (cart.isEmpty()) {
+                cout << "\nYour cart is empty. Add items before checkout.\n";
+            } else {
+                cout << "\nGenerating Bill...\n";
+                cart.displayCart();
+                cout << "\nThank you for shopping with us!\n";
+                cart.clearCart();
+            }
+        } else if (choice == 5) {
+            cout << "\nExiting the application. Goodbye!\n";
+        } else {
+            cout << "\nInvalid choice. Please try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
